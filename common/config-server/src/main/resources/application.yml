@@ -4,7 +4,7 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/kennyk65/Microservices-With-Spring-Student-Files
-          searchPaths: ConfigData
+          uri: https://github.com/eleung1/SpringCloudConfigTest
+
 server:
   port: 8001
