@@ -8,7 +8,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class WordController {
 
-	@Value("${words}") String words;
+	//@Value("${words}") String words;
+  
+  // testing out ribbon with 2 NOUN servers
+  String words = "icicle,refrigerator,blizzard,snowball";
 	
 	@RequestMapping("/")
 	public @ResponseBody String getWord() {

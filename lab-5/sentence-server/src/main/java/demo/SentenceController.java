@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -16,8 +17,11 @@ import org.springframework.web.client.RestTemplate;
 @Controller
 public class SentenceController {
 
-	@Autowired DiscoveryClient client;
+	@Autowired 
+	DiscoveryClient client;
 	
+	@Autowired 
+	private LoadBalancerClient ribbonClient;
 	
 	/**
 	 * Display a small list of Sentences to the caller:
@@ -43,11 +47,11 @@ public class SentenceController {
 		try{
 			sentence =  
 				String.format("%s %s %s %s %s.",
-					getWord("SUBJECT"),
-					getWord("VERB"),
-					getWord("ARTICLE"),
-					getWord("ADJECTIVE"),
-					getWord("NOUN") );			
+				    getWordWithRibbon("SUBJECT"),
+				    getWordWithRibbon("VERB"),
+				    getWordWithRibbon("ARTICLE"),
+				    getWordWithRibbon("ADJECTIVE"),
+				    getWordWithRibbon("NOUN") );			
 		} catch ( Exception e ) {
 			System.out.println(e);
 		}
@@ -68,6 +72,20 @@ public class SentenceController {
 	      	}
         }
         return null;
+	}
+	
+	/**
+	 * Lab 5 exercise:
+	 * Use Ribbon client side load balancer to choose a ServiceInstance.
+	 * 
+	 * @param service service name
+	 * @return response from the service with the provided service name.
+	 */
+	public String getWordWithRibbon(String service)
+	{
+	  ServiceInstance serviceInstance = ribbonClient.choose(service);
+	  URI uri = serviceInstance.getUri();
+	  return (new RestTemplate()).getForObject(uri,String.class);
 	}
 
 }
