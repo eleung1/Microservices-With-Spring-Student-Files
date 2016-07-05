@@ -3,6 +3,7 @@ package demo.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import demo.dao.NounClient;
 import demo.dao.WordDao;
 
 /**
@@ -17,8 +18,10 @@ public class SentenceServiceImpl implements SentenceService {
 	private WordDao subjectService;
 	private WordDao articleService;
 	private WordDao adjectiveService;
-	private WordDao nounService;
+	//private WordDao nounService;
 	
+	// Feign client
+	private NounClient nounClient;
 
 	/**
 	 * Assemble a sentence by gathering random words of each part of speech:
@@ -31,7 +34,7 @@ public class SentenceServiceImpl implements SentenceService {
 				verbService.getWord().getString(),
 				articleService.getWord().getString(),
 				adjectiveService.getWord().getString(),
-				nounService.getWord().getString() );
+				nounClient.getWord().getString() );
 		return sentence;
 	}
 
@@ -56,10 +59,17 @@ public class SentenceServiceImpl implements SentenceService {
 		this.adjectiveService = adjectiveService;
 	}
 
+	/*
 	@Autowired
 	public void setNounService(WordDao nounService) {
 		this.nounService = nounService;
 	}	
+	*/
 	
-	
+	// -- Feign lab exercise
+	@Autowired
+	public void setNounClient(NounClient nounClient)
+	{
+	  this.nounClient = nounClient;
+	}
 }
