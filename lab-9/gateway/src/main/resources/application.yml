@@ -1,3 +1,6 @@
 ---
 # Allow thymeleaf template changes to reload:
 spring.thymeleaf.cache: false
+
+zuul:
+  prefix: /services
